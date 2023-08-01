@@ -162,6 +162,7 @@ UNC have access to a 20% sample of the US Medicare claims database from 2007 to 
 -  [R for Epidemiology](https://epirhandbook.com/en/)
 -  [R for Data Science](https://r4ds.had.co.nz/) - focuses on Tidyverse
 -  [Mastering Shiny](https://mastering-shiny.org/basic-app.html)
+-  [An Introduction to Machine Learning with R](https://lgatto.github.io/IntroMachineLearningWithR/an-introduction-to-machine-learning-with-r.html)
 
 #### <b>Epidemiology</b>
 - [Causal Inference: What If](https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/)

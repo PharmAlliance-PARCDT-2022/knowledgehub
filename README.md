@@ -104,6 +104,54 @@ This repository includes information about researchers involved, including their
 </table>
 
 ---
+## Data Sources
+
+#### The Health Improvement Network (THIN)
+Available at: UCL
+
+THIN is a nationwide database that contains electronic primary care records from UK general practices for 15 million individuals. THIN covers a 6% representative sample of the UK population. Multiple diagnoses and lifestyle variables recorded in THIN database, including cardiovascular diseases, diabetes, obseity and smoking, have been used and validated for pharmacoepidemiological research. THIN is subject to the UK Data Protection Act 2018 and EU General Data Protection Regulation (GDPR). Data obtained have been anonymised and consent was previously collected.
+
+Description taken from: </br>
+Ilomäki, J., Bell, J.S., Chan, A.Y.L. et al. Application of Healthcare ‘Big Data’ in CNS Drug Research: The Example of the Neurological and mental health Global Epidemiology Network (NeuroGEN). CNS Drugs 34, 897–913 (2020). [https://doi.org/10.1007/s40263-020-00742-4](https://doi.org/10.1007/s40263-020-00742-4)
+
+#### Clinical Practice Research Datalink (CPRD) GOLD
+Available at: UCL
+
+CPRD GOLD is a database of anonymised longitudinal routinely-collected electronic health records from UK primary care practices that use the Vision software. It contains demographic information, drug exposure, diagnoses, symptoms, laboratory tests, vaccination history, and referrals to hospital and specialist care. As of March 2023, there were over 21 million acceptable patients in the database. CPRD databases can be linked with other databases, including death registrations from the Office for National Statistics, various metrics for deprivation, Hospital Episode Statistics, and cancer registries. Data in CPRD GOLD are coded using READ codes. CPRD databases are representative of the national population. CPRD GOLD can be combined with CPRD Aurum.
+
+The data specification is available [here.](https://cprd.com/sites/default/files/2022-02/CPRD%20GOLD%20Full%20Data%20Specification%20v2.5.pdf)
+
+Herrett E, Gallagher AM, Bhaskaran K, Forbes H, Mathur R, van Staa T, Smeeth L. Data Resource Profile: Clinical Practice Research Datalink (CPRD). Int J Epidemiol. 2015 Jun 6;44(3):827–36. [https://doi.org/10.1093/ije/dyv098](https://doi.org/10.1093/ije/dyv098)
+
+#### Clinical Practice Research Datalink (CPRD) Aurum
+Available at: UCL
+
+CPRD GOLD is a database of anonymised longitudinal routinely-collected electronic health records from UK primary care practices that use the EMIS Web software. As of September 2018, CPRD Aurum included 19 million patients, including 7 million who were alive and contributing to the database, and represented 13% of the population of England. Like CPRD GOLD, CPRD Aurum is representative of the national population and can be linked with other databases. Data in CPRD Aurum are coded using the SNOMED coding system.
+
+The data specification is available [here.](https://cprd.com/sites/default/files/2023-04/CPRD%20Aurum%20Data%20Specification%20v2.9.pdf)
+
+Wolf A, Dedman D, Campbell J, Booth H, Lunn D, Chapman J, Myles P. Data resource profile: Clinical Practice Research Datalink (CPRD) Aurum. Int J Epidemiol. 2019 Mar 11. pii: dyz034. [https://doi.org/10.1093/ije/dyz034](https://doi.org/10.1093/ije/dyz034)
+
+####  Australian Pharmaceutical Benefits Scheme (PBS) Data
+Available at: Monash
+
+Australian Pharmaceuitcal Benefits Scheme data covers a random 10% of the Australian population (approximately 2.5 million people).
+
+Details about the data source are available [here.](https://bmcresnotes.biomedcentral.com/articles/10.1186/s13104-015-1616-8)
+
+Mellish, L., Karanges, E.A., Litchfield, M.J. et al. The Australian Pharmaceutical Benefits Scheme data collection: a practical guide for researchers. BMC Res Notes 8, 634 (2015). https://doi.org/10.1186/s13104-015-1616-8
+
+#### Linked Victorian Primary Care and Hospital Data
+Available at: Monash
+
+The Monash team has access to linked medication, primary care, and hospital records for more than 400,000 residents of Victoria over the age of 30 from 2012 to 2018.
+
+#### Sample of Medicare
+Available at: UNC
+
+UNC have access to a 20% sample of the US Medicare claims database from 2007 to 2019. Medicare is nationally representative of older adults in the US. The data includes information on diganosis, procedures, prescription refill records, both inpatient and outpatient services, and demographic information. Use of the data is readily-available when working with UNC-affiliated researchers, for a fee.
+
+---
 ## 🎯 Training
 
 #### <b>Statistics</b>

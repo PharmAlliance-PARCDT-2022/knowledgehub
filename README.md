@@ -108,17 +108,16 @@ This repository includes information about researchers involved, including their
 
 #### <b>Statistics</b>
 - [Statistics for Health Data Science by LSHTM](https://lshtm-hds.github.io/Content-2021/00.%20Welcome.html)
--
--
+- [Medical Statistics at a Glane](https://www.cmua.nl/Cmua/Wetenschap_files/Medical%20Statistics%20at%20a%20Glance%202nd%20Ed.pdf)
 
 #### <b>R</b>
 -  [R for Epidemiology](https://epirhandbook.com/en/)
-- 
+-  [R for Data Science](https://r4ds.had.co.nz/) - focuses on Tidyverse
+-  [Mastering Shiny](https://mastering-shiny.org/basic-app.html)
 
 #### <b>Epidemiology</b>
--
--
--
+- [Causal Inference: What If](https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/)
+- [Basic Epidemiology, WHO](http://apps.who.int/iris/bitstream/handle/10665/43541/9241547073_eng.pdf)
 
 ---
 ## 📫 Contact

@@ -56,25 +56,25 @@ This repository includes information about researchers involved, including their
       👩‍💻R (advanced), SAS (beginner), Python (intermediate)</td>
       <td align="center" width-="250px"><a href="https://orcid.org/0000-0003-2320-0470"><img src="https://avatars.githubusercontent.com/u/47313528?v=4" width="200px;" alt="Wallis Lau"/><br /><b>Wallis CY Lau</b></a><br />
       Lecturer in Pharmacoepidemiology and Drug Safety<br/>
-      🔬</br>
-      👩‍💻</br></br></br></td>
-      <td align="center" width="250px"><a href="https://orcid.org/0000-0003-2320-0470"><img src="https://avatars.githubusercontent.com/u/47313528?v=4" width="200px;" alt="Wallis Lau"/><br /><b>Person</b></a><br />
-      Title<br/>
-      🔬 Research Interets</br>
+      🔬 EHR research, cardiovascular, neurological, and mental health conditions, statistics</br>
+      👩‍💻 SAS, R</br></br></br></td>
+      <td align="center" width="250px"><a href="https://www.ucl.ac.uk/pharmacy/people/prof-li-wei"><img src="https://avatars.githubusercontent.com/u/47313528?v=4" width="200px;" alt="Li Wei"/><br /><b>Li Wei</b></a><br />
+      Professor of Pharmacoepidemiology and Drug Safety Research<br/>
+      🔬 EHR databases, drug utilization and safety in cardiovascular disease, medication adherence in chronic diseases</br>
       👩‍💻 technical skills/research methods</br></br></br></td>
     </tr>
   </tbody>
 </table>
 <table>
   <tbody>
-  <h3><b>UNC</b></h3>
+  <h3><b>Monash</b></h3>
     <tr>
-      <td align="center" width="250px"><a href="https://orcid.org/0000-0003-2320-0470"><img src="https://avatars.githubusercontent.com/u/47313528?v=4" width="200px;" alt="Wallis Lau"/><br /><b>Person</b></a><br />
-      Title<br/>
+      <td align="center" width="250px"><a href=""><img src="https://avatars.githubusercontent.com/u/47313528?v=4" width="200px;" alt="Darshna Goordeen"/><br /><b>Darshna Goordeen</b></a><br />
+      PhD Student<br/>
       🔬 Research Interets</br>
       👩‍💻 technical skills/research methods</br></br></br></td>
-      <td align="center" width="250px"><a href="https://orcid.org/0000-0003-2320-0470"><img src="https://avatars.githubusercontent.com/u/47313528?v=4" width="200px;" alt="Wallis Lau"/><br /><b>Person</b></a><br />
-      Title<br/>
+      <td align="center" width="250px"><a href="https://research.monash.edu/en/persons/simon-bell"><img src="https://avatars.githubusercontent.com/u/47313528?v=4" width="200px;" alt="Simon Bell"/><br /><b>Simon Bell</b></a><br />
+      Professor and NHMRC Dementia Leadership Fellow, Centre for Medicine Use and Safety<br/>
       🔬 Research Interets</br>
       👩‍💻 technical skills/research methods</br></br></br></td>
       <td align="center" width="250px"><a href="https://orcid.org/0000-0003-2320-0470"><img src="https://avatars.githubusercontent.com/u/47313528?v=4" width="200px;" alt="Wallis Lau"/><br /><b>Person</b></a><br />
@@ -85,15 +85,15 @@ This repository includes information about researchers involved, including their
   </tbody>
 </table><table>
   <tbody>
-  <h3><b>Monash</b></h3>
+  <h3><b>UNC</b></h3>
     <tr>
       <td align="center" width="250px"><a href="https://orcid.org/0000-0003-2320-0470"><img src="https://avatars.githubusercontent.com/u/47313528?v=4" width="200px;" alt="Wallis Lau"/><br /><b>Person</b></a><br />
       Title<br/>
       🔬 Research Interets</br>
       👩‍💻 technical skills/research methods</br></br></br></td>
-      <td align="center" width="250px"><a href="https://orcid.org/0000-0003-2320-0470"><img src="https://avatars.githubusercontent.com/u/47313528?v=4" width="200px;" alt="Wallis Lau"/><br /><b>Person</b></a><br />
-      Title<br/>
-      🔬 Research Interets</br>
+      <td align="center" width="250px"><a href="https://www.med.unc.edu/medicine/news/directory/joshua-niznik/"><img src="https://avatars.githubusercontent.com/u/47313528?v=4" width="200px;" alt="Joshua Niznik"/><br /><b>Joshua Niznik</b></a><br />
+      Assistant Professor of Medicine<br/>
+      🔬 Clinical pharmacy, pharmacoepidemiology, geriatrics, health services research, Medicare, polypharmacy, deprescribing </br>
       👩‍💻 technical skills/research methods</br></br></br></td>
       <td align="center" width="250px"><a href="https://orcid.org/0000-0003-2320-0470"><img src="https://avatars.githubusercontent.com/u/47313528?v=4" width="200px;" alt="Wallis Lau"/><br /><b>Person</b></a><br />
       Title<br/>

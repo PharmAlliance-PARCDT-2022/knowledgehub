@@ -1,0 +1,250 @@
+# Examples of Line Charts with Time Series Data
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=FALSE, include=FALSE}
+# import necessarily libraries
+library(tidyverse)
+library(ggplot2)
+library(ggthemes)
+library(ggtext)
+library(scales)
+library(ggrepel)
+```
+Credits: These charts were produced by Olivia Bryant as part of an MSc module at the London School of Hygiene and Tropical Medicine. The GitHub for the original project can be found [here](https://github.com/OliviaKBryant/lshtm-data-challenge). Data was obtained in February 2022 from OpenPrescribing.net, Bennett Institute for Applied Data Science, University of Oxford, 2023
+
+The aim of this project was to use Open Prescribing data to look at the impact COVID-19 may have had on prescribing rates for corticosteroids. This markdown file is just for educational purposes.
+
+❗ **Important Note:**  ❗ *the Markdown file will show the plots but in order to see them as intended, view the saved versions. When developing plots in R, it's important to view the saved version and not rely on the Markdown outputs or Plot viewer in RStudio as these may not be the intended size of the plots which may cause things to overlap or become misaligned.
+
+```{r}
+# import data and clean
+regions <- read.csv("data/NHS_England_regions_corticosterioid_prescriptions.csv")
+# calculate prescription rate per 1000
+regions$prescription_rate_per_1000 <- regions$items/(regions$list_size/1000)
+head(regions)
+
+# change the regional names for brevity
+regions <- regions %>% 
+  mutate(name = case_when(name == "LONDON COMMISSIONING REGION" ~ "London",
+                          name == "EAST OF ENGLAND COMMISSIONING REGION" ~ "East of England",
+                          name == "NORTH WEST COMMISSIONING REGION"  ~ "North West",
+                          name ==  "SOUTH WEST COMMISSIONING REGION" ~ "South West",
+                          name ==  "SOUTH EAST COMMISSIONING REGION" ~ "South East",
+                          name ==  "MIDLANDS COMMISSIONING REGION" ~ "Midlands",
+                          name ==  "NORTH EAST AND YORKSHIRE COMMISSIONING REGION" ~ "North East and Yorkshire")
+  )
+head(regions)
+```
+
+
+
+
+#### ggthemes
+
+[ggthemes](https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/) is a package that allows for certain visual criteria for plots produced within a project to be set and applied to all of the plots. This makes it easier to have visual continuity in a project. There are preset themes, including those recreating charts produced in the Economist, The Wall Street Journal, and fivethirtyeight. There are also preset themes to match plots made in Excel, Stata, or Google Docs.
+
+```{r}
+# set theme to match that of fivethirtyeight
+theme_set(theme_fivethirtyeight())
+# set background to white
+theme_update(axis.title = element_text(),
+             plot.caption = element_text(hjust = 0, vjust = 0),
+             plot.background = element_rect(fill = "white", colour = "white"),
+             panel.background = element_rect(fill = "white", colour = "white"),
+             legend.background = element_rect(fill = "white", colour = "white"))
+```
+
+
+#### Example 1: Multi-line Time Series Chart with Legend
+```{r, out.width='100%'}
+regions$date <- as.Date(regions$date)
+
+# 'color' allows for a different line
+region_line_plot <- ggplot(data=regions, aes(x=date, y=prescription_rate_per_1000, color=name)) +
+  geom_line(aes(x=date, y=prescription_rate_per_1000, group=name)) +
+  theme_fivethirtyeight()+
+  theme(
+        legend.box="vertical",
+        legend.position="right",
+        legend.justification = c(1, 1),
+        legend.title = element_blank(),
+        axis.title = element_text(),
+        axis.text.x = element_text(size = 6),
+        plot.caption = element_text(hjust = 0, vjust = 0),
+        plot.background = element_rect(fill = "white", colour = "white"),
+        panel.background = element_rect(fill = "white", colour = "white"),
+        legend.background = element_rect(fill = "white", colour = "white"),
+        panel.grid.major.x = element_blank() ,
+        panel.grid.major.y = element_line(linewidth=.1, color="black"))+
+  # will set the axis ticks at Jan/July or every year. Uses the scales library.
+  scale_x_date(date_labels = "%b %Y", breaks = breaks_pretty(10),labels =
+                 # ensures that the labels are displayed as a shortened version of the month
+                 scales::label_date_short())+
+  labs(title = 'Systemic Corticosteroids Prescriptions by NHS England Region',
+       subtitle = 'London\'s prescription rate has been consistently lower than other regions.' ,
+       y = "Items prescribed per 1000 patients",
+       x = element_blank(),
+       caption = "Source: OpenPrescribing.net, EBM DataLab, University of Oxford, 2022")+
+  # formats the legend so that each region takes one row
+  guides(color=guide_legend(nrow=7, byrow=TRUE))+
+  # sets the maximum value of the y axis
+  ylim(0, max(regions$prescription_rate_per_1000)+1)
+
+region_line_plot
+```
+Once a plot has been made, amendments can be made while saving the plot (for example, changing the text size), so that the plot can be saved in a way that is optimised for different formats. For example, below I have saved two versions, one optimised for Powerpoint slides with the correct ratio, and one for an accompanying plot that was on A4. A plot can be saved in jpg, png, and svg (with additional package) formats.
+
+```{r}
+# Save plot to the size of a 16:9 PowerPoint slide
+ggsave(plot = region_line_plot,'plots/linecharts_example1_PP.png', width = 10, height = 5.625, units = "in")
+
+# Save plot formatted for A4
+ggsave('plots/linecharts_example1_A4.png',
+       plot =  region_line_plot+ 
+         theme(plot.title = element_markdown(size = 17),
+               plot.subtitle = element_markdown(size = 12),
+               axis.text.x = element_text(size = 7)),
+       width = 8,
+       height = 4.5,
+       units = "in")
+```
+
+
+
+#### Example 2: Multi-Line Chart with Labels at the End of Lines
+
+```{r}
+# save a version of the subset of the data that pertains to the last record for each of the regions
+label_ends <- regions[regions$date == max(regions$date), ]
+
+labels_end_of_line <- ggplot(data=regions, aes(x=date, y=prescription_rate_per_1000, color=name)) +
+  geom_line(aes(x=date, y=prescription_rate_per_1000, group=name)) +
+  theme_fivethirtyeight()+
+  theme(
+    legend.position = "none",
+    panel.grid.major.x = element_blank(),
+    plot.caption = element_text(hjust = 0, vjust = 0),
+    plot.background = element_rect(fill = "white", colour = "white"),
+    panel.background = element_rect(fill = "white", colour = "white"))+
+  ylim(0, max(regions$prescription_rate_per_1000)+1)+
+  scale_x_date(date_labels = "%b %Y", 
+               breaks = seq(as.Date("2017-01-01"), 
+                            as.Date("2021-10-01"), by = "6 months"),
+               labels = scales::label_date_short(),
+               # extend the axis to make room for the labels at the end but limit
+               # the axis ticks to cover just the data
+               lim = c(min(regions$date), as.Date("2022-11-01")))+
+  labs(title = 'Systemic Corticosteroids Prescriptions by NHS England Region',
+       subtitle = 'London\'s prescription rate has been consistently lower than other regions.' ,
+       y = "Items prescribed per 1000 patients",
+       x = element_blank(),
+       caption = "Source: OpenPrescribing.net, EBM DataLab, University of Oxford, 2022")+
+  guides(color=guide_legend(nrow=7, byrow=TRUE)) +
+  # adds the labels at the end of the lines
+  geom_label_repel(data=label_ends, 
+                   aes(label = name),
+                   segment.linetype = "dotted",
+                   size = 3,
+                   # these adjust how far away the labels are from each other to ensure there is no overlaps
+                   hjust = 0,
+                   nudge_y = 0,
+                   # set ticks just to cover the data
+                   xlim=c(as.Date("2021-09-01"), as.Date("2022-11-01")),
+                   na.rm = TRUE) +
+ggtitle("National Prescription Rate per 1000 Patients By NHS England Region")
+labels_end_of_line
+
+# save plot to the size of a 16:9 PowerPoint slide
+ggsave(plot=labels_end_of_line, 'plots/linecharts_example2.png', width = 10, height = 5.625, units = "in")
+
+```
+
+
+
+#### Example 3: Adding Annotation to the Charts
+
+
+Annotations are usually shading a particular area (which is done by adding a rectangle to the plot), text, or lines (which is usually done by adding horizontal or vertical lines in the data). Annotations can be made for specific points using geom_label_repel, an example of which can be found [here](https://r-graph-gallery.com/web-scatterplot-and-ggrepel.html#:~:text=ggrepel%20provides%20geoms%20for%20ggplot2,text%20labels%20in%20the%20chart).
+
+```{r}
+## plot with regional labels at the end of the line, annotations of the lockdowns
+labels_end_annotation <- ggplot(data=regions, aes(x=date, y=prescription_rate_per_1000, color=name)) +
+  geom_line(aes(x=date, y=prescription_rate_per_1000, group=name)) +
+  theme_fivethirtyeight()+
+  theme(
+    legend.position = "none",
+    axis.title = element_text(),
+    panel.grid.major.x = element_blank(),
+    plot.caption = element_text(hjust = 0, vjust = 0),
+    plot.background = element_rect(fill = "white", colour = "white"),
+    panel.background = element_rect(fill = "white", colour = "white"))+
+  ylim(0, 23.75)+
+  scale_x_date(date_labels = "%b %Y", 
+               breaks = seq(as.Date("2017-01-01"), 
+                            as.Date("2021-10-01"), by = "6 months"),
+               labels = scales::label_date_short(),
+               # extend the axis to make room for the labels at the end but limit
+               # the axis ticks to cover just the data
+               lim = c(min(regions$date), as.Date("2022-11-01")))+
+  labs(title = 'Systemic Corticosteroids Prescriptions by NHS England Region',
+       subtitle = 'London\'s prescription rate has been consistently lower than other regions.' ,
+       y = "Items per 1000 patients",
+       x = element_blank(),
+       caption = "Source: OpenPrescribing.net, EBM DataLab, University of Oxford, 2022")+
+  guides(color=guide_legend(nrow=7, byrow=TRUE))+
+  geom_label_repel(data=label_ends, 
+                   aes(label = name),
+                   segment.linetype = "dotted",
+                   size = 3,
+                   hjust=0,
+                   min.segment.length = 0.1,
+                   seed = 1,
+                   nudge_y = 0.5,
+                   # set ticks just to cover the data
+                   xlim=c(as.Date("2021-09-01"), as.Date("2022-11-01")),
+                   ylim=c(6.366,22.5)) +
+  geom_vline(xintercept = as.Date("2020-01-28"), # first case in the UK
+             colour = "gray") +
+  annotate("rect", # first lockdown
+           fill = "gray", 
+           alpha = 0.4,
+           xmin = as.Date("2020-03-26"), 
+           xmax = as.Date("2020-05-17"),
+           ymin=-Inf, ymax=Inf) + 
+  annotate("rect", # second lockdown
+           fill = "gray", 
+           alpha = 0.4, 
+           xmin = as.Date("2020-11-05"), 
+           xmax = as.Date("2020-12-02"),
+           ymin=-Inf, 
+           ymax=Inf) +
+  annotate("rect", # third lockdown
+           fill = "gray", 
+           alpha = 0.4, 
+           xmin = as.Date("2021-01-05"), 
+           xmax = as.Date("2021-04-12"),
+           ymin=-Inf, 
+           ymax=Inf)+
+  annotate("text",
+                  x = c(as.Date("2020-02-02"), 
+                        as.Date("2020-03-29"), 
+                        as.Date("2020-11-08"), 
+                        as.Date("2021-01-08")), 
+                  y = 22.1, 
+                  label = c("1st C19 Case", 
+                            "1st Lockdown",
+                            "2nd Lockdown",
+                            "3rd Lockdown") , 
+                  size = 2.4,
+                  alpha = 0.7,
+                  angle = -90,
+                  vjust = 0)
+labels_end_annotation
+
+ggsave(plot=labels_end_annotation, 'plots/linecharts_example3.png', width = 10, height = 5.625, units = "in")
+```
+
+
+

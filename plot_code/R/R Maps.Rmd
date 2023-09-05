@@ -1,0 +1,156 @@
+# Examples of Maps
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=FALSE, include=FALSE}
+# import necessarily libraries
+library(tidyverse)
+library(ggplot2)
+library(ggthemes)
+library(ggtext)
+library(scales)
+library(sf)
+```
+Credits: These charts were produced by Olivia Bryant as part of an MSc module at the London School of Hygiene and Tropical Medicine. The GitHub for the original project can be found [here](https://github.com/OliviaKBryant/lshtm-data-challenge). Data was obtained in February 2022 from OpenPrescribing.net, Bennett Institute for Applied Data Science, University of Oxford, 2023
+
+The aim of this project was to use Open Prescribing data to look at the impact COVID-19 may have had on prescribing rates for corticosteroids. This markdown file is just for educational purposes.
+
+❗ **Important Note:**  ❗ *the Markdown file will show the plots but in order to see them as intended, view the saved versions. When developing plots in R, it's important to view the saved version and not rely on the Markdown outputs or Plot viewer in RStudio as these may not be the intended size of the plots which may cause things to overlap or become misaligned.
+
+
+#### Choropleth
+
+A choropleth is a map where statistical data is represented by shading geographic areas on different colours or patterns (like a heatmap, except the regions refer to actual geographic regions). Choropleths are one of the most common ways to represent data.
+
+Maps can generally only represent data on one point in time or a metric of change of time, like percentage change. Therefore, I can only plot data for one particular month.
+
+I created a function to create a choropleth that takes in a month, the data, an upper and lower limit for the choropleth legend, and a shapefile for the boundary.
+```{r}
+# import regional files
+regions <- read.csv("data/NHS_England_regions_corticosterioid_prescriptions.csv")
+# calculate prescription rate per 1000
+regions$prescription_rate_per_1000 <- regions$items/(regions$list_size/1000)
+head(regions)
+
+# change the regional names to match the government shapefiles
+regions <- regions %>% 
+  mutate(name = case_when(name == "LONDON COMMISSIONING REGION" ~ "London",
+                          name == "EAST OF ENGLAND COMMISSIONING REGION" ~ "East of England",
+                          name == "NORTH WEST COMMISSIONING REGION"  ~ "North West",
+                          name ==  "SOUTH WEST COMMISSIONING REGION" ~ "South West",
+                          name ==  "SOUTH EAST COMMISSIONING REGION" ~ "South East",
+                          name ==  "MIDLANDS COMMISSIONING REGION" ~ "Midlands",
+                          name ==  "NORTH EAST AND YORKSHIRE COMMISSIONING REGION" ~ "North East and Yorkshire")
+  )
+
+# import NHS England region boundaries
+NHS_regions_bound <- read_sf("data/NHS_England_Regions_(April_2019)_EN_BFC.shp")
+
+# date must be input at "YYYY-MM-DD" format
+choropleth_maker <- function(date, low_lim, up_lim, boundary, data) {
+  # firstly, filter for the month of interest
+  data.filtered <- data[data['date'] == date,]
+  data.filtered <- left_join(boundary, data.filtered, by = c("nhser19nm" = "name"))
+  choro <- ggplot(data.filtered, aes(fill = prescription_rate_per_1000)) +
+    geom_sf(color = "#ffffff", size = 0.1) +
+    scale_fill_distiller(direction = 1, palette='Blues', limits=c(low_lim,up_lim), name="Items per 1000 patients") +
+    theme(
+      plot.background = element_rect(fill = "white", colour = "white"),
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      panel.border = element_blank(),
+      axis.text.y=element_blank(),
+      axis.text.x=element_blank(),
+      axis.ticks=element_blank(),
+    )
+  choro
+}
+
+choropleth_maker("2020-03-01", 8, 18, NHS_regions_bound, regions)
+```
+#### Facet-wrap Choropleth
+
+A facet-wrap is a way of putting multiple plots side-by-side for comparison in ggplot2. Facet-wraps are usually done to compare one variable (e.g. comparing different months side by side or different categories.)
+
+```{r}
+## making plot comparing March 2019, 2020, 2021
+march_comparison <- regions[regions$date == "2019-03-01" | regions$date == "2020-03-01" | regions$date == "2021-03-01",]
+regions.filtered <- left_join(NHS_regions_bound, march_comparison, by = c("nhser19nm" = "name"))
+
+facet_labels <- c(
+  '2019-03-01'="March 2019",
+  '2020-03-01'="March 2020",
+  '2021-03-01'="March 2021"
+)
+
+# map comparison of March 2019, 2020, 2021 for presentation
+march_facet_pres <- ggplot(regions.filtered, aes(fill = prescription_rate_per_1000)) +
+  geom_sf(color = "#ffffff", size = 0.1) +
+  scale_fill_distiller(direction = 1, palette='Blues') +
+  facet_wrap(~ date, nrow = 1, labeller=as_labeller(facet_labels), shrink=TRUE) +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.text.x = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks = element_blank(),
+    legend.position ="bottom",
+    legend.title=element_text(size=10),
+    plot.caption = element_text(hjust = 0, vjust = 0),
+  )+
+  labs(title = 'Impact of the First COVID-19 Lockdown on Systemic Corticosteroid\nPrescriptions in England',
+       subtitle = 'March 2020—the start of the first lockdown—saw substantially higher rates of systemic corticosteroid prescriptions\ncompared with 2019 and 2021.' ,
+       fill="Items per 1000 patients",
+       caption = "Source: OpenPrescribing.net, EBM DataLab, University of Oxford, 2022")
+march_facet_pres
+ggsave(plot = march_facet_pres, 'plots/facet_wrap_map_example1.png', width = 10, height = 5.625, units = "in")
+
+march_facet_pres <- ggplot(regions.filtered, aes(fill = prescription_rate_per_1000)) +
+  geom_sf(color = "#ffffff", size = 0.1) +
+  scale_fill_distiller(direction = 1, palette='Blues') +
+  facet_wrap(~ date, nrow = 1, labeller=as_labeller(facet_labels), shrink=TRUE) +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.text.x = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks = element_blank(),
+    legend.position ="bottom",
+    legend.title=element_text(size=10),
+    plot.caption = element_text(hjust = 0, vjust = 0),
+  )+
+  labs(title = 'Impact of the First COVID-19 Lockdown on Systemic Corticosteroid\nPrescriptions in England',
+       subtitle = 'March 2020—the start of the first lockdown—saw substantially higher rates of systemic corticosteroid prescriptions\ncompared with 2019 and 2021.' ,
+       fill="Items per 1000 patients",
+       caption = "Source: OpenPrescribing.net, EBM DataLab, University of Oxford, 2022")
+march_facet_pres
+ggsave(plot = march_facet_pres, 'plots/facet_wrap_map_example2.png', width = 10, height = 5.625, units = "in")
+
+
+march_facet_rep <- ggplot(regions.filtered, aes(fill = prescription_rate_per_1000)) +
+  geom_sf(color = "#ffffff", size = 0.1) +
+  scale_fill_distiller(direction = 1, palette='Blues') +
+  facet_wrap(~ date, nrow = 1, labeller=as_labeller(facet_labels), shrink=TRUE) +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.text.x = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks = element_blank(),
+    legend.position ="bottom",
+    legend.title=element_text(size=10),
+    plot.caption = element_text(hjust = 0),
+    plot.title = element_text(size = 17),
+    plot.subtitle = element_text(size = 12)
+  )+
+  labs(title = 'Impact of the First COVID-19 Lockdown on\nSystemic Corticosteroid Prescriptions in England',
+       subtitle = 'March 2020—the start of the first lockdown—saw substantially\nhigher rates of systemic corticosteroid prescriptions compared with 2019 and 2021.' ,
+       fill="Items per 1000 patients",
+       caption = "Source: OpenPrescribing.net, EBM DataLab, University of Oxford, 2022")
+march_facet_rep
+ggsave(plot = march_facet_rep, 'plots/facet_wrap_map_example3.png', width = 8, height = 4.5, units = "in")
+
+```
+
